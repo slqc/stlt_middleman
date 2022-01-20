@@ -3,6 +3,31 @@
 @import "bulma/theme/bulmaswatch_sandstone.min.css";
 @import "syntax.css";
 
+.toc {
+    position: fixed;
+    right: 2px;
+    top: 80px;
+}
+.toc h4 {
+    margin: 2px; /* Removes the margin from the TOC heading. */
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+    font-weight: bold; /* Makes the font-weight of the TOC heading bold */
+    color: #5faeea;
+}
+.toc ul {
+    margin: 0px;
+    list-style: none; /* This removes the list styling which are provided by default */
+    padding: 0px; /* Removes the front padding */
+}
+.toc ul li a {
+    color: #4c74b9;
+    text-decoration: none; /* Removes the underline from the link tags */
+}
+.toc ul li {
+    padding: 2px; /* Adds a little space around each <li> tag */
+}
+
 .s-pad-1 {
     padding-top: 1.5rem;
 }
@@ -49,7 +74,7 @@ details {
         &:before {
             display: flex;
             justify-content: center; align-items: center;
-            content: '\f0fe';
+            content: "\002B";
             font-family: FontAwesome;
             font-size: 90%;
             position: absolute;
@@ -67,6 +92,6 @@ details {
         transition: transform 300ms;
     }
     
-    &[open] summary:before { content: '\f146'; }
+    &[open] summary:before { content: "\2212"; }
     &[open] > :not(summary) { transform: scaleY(1); }
 }

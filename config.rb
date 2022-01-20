@@ -22,7 +22,10 @@ activate :syntax
 set :markdown_engine, :kramdown
 set :markdown, 
   input: "GFM", 
-  syntax_highlighter: "coderay"
+  syntax_highlighter: "coderay",
+  auto_ids: true,
+  #parse_block_html: true,
+  toc_levels: 2..3
 
 #set :markdown_engine, :redcarpet
 #set :markdown, tables: true, autolink: true, with_toc_data: true, no_intra_emphasis: true, fenced_code_blocks: true, lax_spacing: true
@@ -82,7 +85,7 @@ configure :build do
 end
 
 activate :deploy do |deploy|
-  deploy.deploy_method   = :sftp
+  deploy.deploy_method   = :ftp
   deploy.host            = ENV['middleman_host']
   deploy.path            = '/'
   deploy.port            = 21
