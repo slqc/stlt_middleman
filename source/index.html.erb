@@ -8,12 +8,50 @@ layout: 'layout'
     <div class="hero-body">
         <div class="container">
             <h1 class="title"><%= current_page.data.title %></h1>
-            <h2 class="subtitle">IT-Security and assorted blogging </h2>
+            <h2 class="subtitle">IT-Security and assorted topics </h2>
         </div>
     </div>
 </section>
 
 <div class="tile is-ancestor s-pad-1">
+ <div class="tile is-parent">
+      <% link_to 'articles/c_hack_walkthroughs', class: "tile is-parent" do%> 
+         <article class="tile is-child notification is-warning is-bold">
+            <p class="title">Articles</p>
+            <p class="subtitle">C Hack Walkthroughs</p>
+            <div class="content">
+              <p>Show of your understanding of C by mastering some non trivial exploits.</p>
+            </div>
+            
+        </article>
+      <%end%>
+    </div>
+    <div class="tile is-parent">
+      <% link_to 'articles/netcat', class: "tile is-parent" do%> 
+         <article class="tile is-child notification is-warning is-bold">
+            <p class="title">Articles</p>
+            <p class="subtitle">1001 uses of netcat</p>
+            <div class="content">
+              <p>There are multiple versions of netcat. If you fail with a reverse shell because your target's netcat doesn't have the '-e' option you should read this article. You may learn some other more or less useful netcat specialties as well.</p>
+            </div>
+        </article>
+      <%end%>
+    </div>
+    <div class="tile is-parent">
+      <% link_to 'tutorials/WinExp1', class: "tile is-parent" do%> 
+        
+        <article class="tile is-child notification is-warning is-bold">
+            <p class="title">Tutorial Series</p>
+            <p class="subtitle">Windows Exploitation</p>
+            Use the knowledge gained in the Reverse Engineering tutorials to write windows exploits.
+            <figure class="image is-4by4">
+            <%= image_tag 'tutorials/WinExp1/img/WinExp1_teaser.png'%>
+            </figure>
+        </article>
+      <%end%>
+    </div>
+  </div>
+  <div class="tile is-ancestor">
   <div class="tile is-vertical is-8">
     <% link_to 'tutorials/WinReverseEng' do %>
       <div class="tile is-parent">
@@ -28,20 +66,13 @@ layout: 'layout'
       </div>
     <%end%>
     <div class="tile">
-      <% link_to 'tutorials/WinExp1', class: "tile is-parent" do%> 
-        
-        <article class="tile is-child notification is-warning is-bold">
-            <p class="title">Tutorial Series</p>
-            <p class="subtitle">Windows Exploitation</p>
-            Use the knowledge gained in the Reverse Engineering tutorials to write windows exploits.
-            <figure class="image is-4by4">
-            <%= image_tag 'tutorials/WinExp1/img/WinExp1_teaser.png'%>
-            </figure>
-            <!--
-            <figure class="image">
-              
-            </figure>
-            -->
+      <% link_to 'articles/middleman', class: "tile is-parent" do%> 
+         <article class="tile is-child notification is-warning is-bold">
+            <p class="title">Articles</p>
+            <p class="subtitle">Middleman static page builder</p>
+            <div class="content">
+              <p>Why I switched my website to Middleman.</p>
+            </div>
         </article>
       <%end%>
       <% link_to 'site/about', class: "tile is-parent" do %>
