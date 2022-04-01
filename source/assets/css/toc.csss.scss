@@ -1,0 +1,24 @@
+.toc {
+	position: fixed;
+    right: 0;
+    top: 0;
+}
+.toc h4 {
+	margin: 0px; /* Removes the margin from the TOC heading. */
+	margin-bottom: 5px;
+	font-size: 1.2rem;
+	font-weight: bold; /* Makes the font-weight of the TOC heading bold */
+	color: #5faeea;
+}
+.toc ul {
+	margin: 0px;
+	list-style: none; /* This removes the list styling which are provided by default */
+	padding: 0px; /* Removes the front padding */
+}
+.toc ul li a {
+	color: #4c74b9;
+	text-decoration: none; /* Removes the underline from the link tags */
+}
+.toc ul li {
+	padding: 2px; /* Adds a little space around each <li> tag */
+}

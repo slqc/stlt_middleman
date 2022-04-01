@@ -39,7 +39,23 @@
             Windows Exploitation
           <% end %>
         </div>
-
+      </div>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">Articles</a>
+        <div class="navbar-dropdown">
+          <% link_to '/articles/android_pentesting/', class: 'navbar-item' do %>
+            Android Penetration Testing
+          <% end %>
+          <% link_to '/articles/middleman.html', class: 'navbar-item' do %>
+           Middleman static websites
+          <% end %>
+          <% link_to '/articles/netcat.html', class: 'navbar-item' do %>
+           1001 Used of netcat
+          <% end %>
+          <% link_to '/articles/c_hack_walkthroughs.html', class: 'navbar-item' do %>
+           C vulnerability walkthroughs
+          <% end %>
+        </div>
       </div>
       <%= menu_link 'About', '/site/about', 'navbar-item' %>
       
